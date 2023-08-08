@@ -413,15 +413,6 @@ public class DuelManager implements Loadable {
                 player.setAllowFlight(false);
             }
 
-            player.closeInventory();
-            playerManager.create(player, match.isOwnInventory() && config.isOwnInventoryDropInventoryItems());
-            teleport.tryTeleport(player, locations.get(++position));
-
-            if (kit != null) {
-                PlayerUtil.reset(player);
-                kit.equip(player);
-            }
-
             if (config.isStartCommandsEnabled() && !(match.getSource() == null && config.isStartCommandsQueueOnly())) {
                 try {
                     for (final String command : config.getStartCommands()) {
@@ -430,6 +421,15 @@ public class DuelManager implements Loadable {
                 } catch (Exception ex) {
                     Log.warn(this, "Error while running match start commands: " + ex.getMessage());
                 }
+            }
+
+            player.closeInventory();
+            playerManager.create(player, match.isOwnInventory() && config.isOwnInventoryDropInventoryItems());
+            teleport.tryTeleport(player, locations.get(++position));
+
+            if (kit != null) {
+                PlayerUtil.reset(player);
+                kit.equip(player);
             }
 
             if (myPet != null) {
@@ -537,14 +537,14 @@ public class DuelManager implements Loadable {
             if (top.getType() == InventoryType.CRAFTING) {
                 top.clear();
             }
-            
-            if (!(match.isOwnInventory() && config.isOwnInventoryDropInventoryItems())) {    
+
+            if (!(match.isOwnInventory() && config.isOwnInventoryDropInventoryItems())) {
                 event.getDrops().clear();
                 event.setKeepLevel(true);
                 event.setDroppedExp(0);
                 event.setKeepInventory(false);
             }
-            
+
             inventoryManager.create(player, true);
             arena.remove(player);
 
